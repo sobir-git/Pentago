@@ -1,0 +1,102 @@
+<UI>:
+	grid: grid
+	topbar: topbar
+	notification_area: notification_area
+
+	BoxLayout:
+
+		orientation: 'vertical'
+		TopBar:
+			id: topbar
+			size_hint_y: None
+			height: 120
+
+		BoxLayout:
+			Grid:
+				canvas.before:
+					Color:
+						rgba: self.background_color
+					Rectangle:
+						pos: self.pos
+						size: self.size
+					Color:
+						rgba: (.8, .8, .8, 1)
+					Line:
+						points: [self.center_x, self.x, self.center_x, self.height]
+						width: 3
+					Line:
+						points: [self.y, self.center_y, self.width, self.center_y]
+						width: 3
+				id: grid
+				cols: 6
+				size_hint_y: None
+				size_hint_x: None
+				width: min(root.width, root.height - topbar.height)
+				height: self.width
+				height: self.width
+				spacing: 15
+				padding: 15
+			AIPanel:
+	NotificationArea:
+		id: notification_area
+		label: label
+		Label:
+			id: label
+			font_size: 60
+			color: (1, 0, 0, 0.6)
+			bold: True
+
+
+<Cell>:
+	canvas:
+		Color: 
+			rgba: self.color[self.token]
+		Line:
+			circle: self.center_x, self.center_y, 1
+			width: self.width // 2 - 5
+
+
+<TopBar>:
+	btn_anticlockwise: btn_anticlockwise
+	btn_clockwise: btn_clockwise
+	padding: 20
+	Label:
+		text: 'MOVE'
+	ExampleCell:
+		token: root.token
+		size_hint_x: None
+		width: self.height
+	Label:
+		text: 'Rotate' if root.rotateable else 'X'
+	ToggleButton:
+		group: 'rotation_mode'
+		text: '<-+'
+		id: btn_anticlockwise
+		disabled: not root.rotateable
+	ToggleButton:
+		disabled: not root.rotateable
+		group: 'rotation_mode'
+		text: '+->'
+		id: btn_clockwise
+	Button:
+		text: "Undo"
+		on_release: root.undo()
+
+
+<AIPanel>:
+	orientation: 'vertical'
+	label: label
+	Label:
+		text: "AI"
+		font_size: 30
+	Button:
+		text: 'AI1 Move'
+		on_release: root.ai_move(1)
+	Button:
+		text: 'AI2 Move'
+		on_release: root.ai_move(2)
+	Button:
+		text: 'Utility'
+		on_release: root.utility()
+	Label:
+		id: label
